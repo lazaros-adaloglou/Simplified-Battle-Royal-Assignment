@@ -1,4 +1,4 @@
-//Lazaros Adaloglou
+// Lazaros Adaloglou.
 
 // Food Class.
 
@@ -64,6 +64,11 @@ public class Food {
 	// Constructors.
 	
 	public Food ( ) {
+		
+		setId ( 0 ) ;
+		setX ( 0 ) ;
+		setY ( 0 ) ;
+		setPoints ( 0 ) ;
 				
 	}
 	
