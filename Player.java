@@ -1,4 +1,4 @@
-//Lazaros Adaloglou
+// Lazaros Adaloglou.
 
 // Player Class.
 
@@ -102,7 +102,7 @@ public class Player {
 		
 	}
 
-	public Weapon getPistol ( ) {
+   	public Weapon getPistol ( ) {
 		
 		return pistol ;
 		
@@ -128,9 +128,19 @@ public class Player {
 	
 	// Constructors.
 	
-	public Player ( ) {
+   	public Player ( ) {
 		
-	}
+        setId ( 0 ) ;
+		setX ( 0 ) ;
+		setY ( 0 ) ;
+		setScore ( 0 ) ;
+		setName ( "null" ) ;
+		setBoard ( null ) ;
+		setBow ( null ) ;
+		setPistol ( null ) ;
+		setSword ( null ) ;
+		
+   	}
 	
 	public Player ( int id , int x , int y , int score , String name , Board board , Weapon bow , Weapon pistol , Weapon sword ) {
 			
@@ -146,589 +156,340 @@ public class Player {
 		
 	}
 	
+	// Function playerPerimeter.
+	
+	int [ ] [ ] playerPerimeter ( int x , int y ) {
+	
+        int [ ] [ ] perimeterMoves = new int [ 8 ] [ 2 ] ;
+        int k = 0 ;
+        int zerocondx = 0 ;
+        int zerocondy = 0 ;
+    
+        for ( int i = 0 ; i < 3 ; i = i + 2 ) {
+    	
+    	    for ( int j = 0 ; j < 3 ; j++ ) {
+    	    	
+    	    	if ( j == 0 & x + j - 1 == 0 ) {
+    	    		
+    	    		zerocondx = - 1 ;
+    	    		
+    	    	}
+    	    	
+    	    	if ( j == 2 & x + j - 1 == 0 ) {
+    	    		
+    	    		zerocondx = 1 ;
+    	    		
+    	    	}
+    	    	
+    	    	if ( i == 0 & y + i - 1 == 0 ) {
+    	    		
+    	    		zerocondy = - 1 ;
+    	    		
+    	    	}
+    	    	
+    	    	if ( i == 2 & y + i - 1 == 0 ) {
+    	    		
+    	    		zerocondy = 1 ;
+    	    		
+    	    	}
+    			
+    	   	    perimeterMoves [ k ] [ 0 ] = ( x + j - 1 + zerocondx ) ;
+    	   	    perimeterMoves [ k ] [ 1 ] = ( y + i - 1 + zerocondy ) ;
+    	        zerocondx = 0 ;
+    	        zerocondy = 0 ;
+    	   	    k++ ;
+    			
+    	    }
+    	    
+	    	if ( i == 0 & x + i - 1 == 0 ) {
+	    		
+	    		zerocondx = - 1 ;
+	    		
+	    	}
+	    	
+	    	if ( i == 2 & x + i - 1 == 0 ) {
+	    		
+	    		zerocondx = 1 ;
+	    		
+	    	}
+    	
+    	    perimeterMoves [ k ] [ 0 ] = ( x + i - 1 + zerocondx ) ;
+    	    perimeterMoves [ k ] [ 1 ] = ( y ) ;
+            zerocondx = 0 ;
+    	    k++ ;
+    		
+        }
+    
+        return perimeterMoves ;
+        
+	}
+	
 	// Function getRandomMove.
 	
 	int [ ] getRandomMove ( ) {
 		
-	    int [ ] newSquare = new int [ 2 ] ;
+	    int [ ] [ ] potentialMoves = new int [ 8 ] [ 2 ] ;
+	    int rand = ( int ) ( Math.random ( ) * 7 ) ;
 	    
-	    // Initializing the variables that will allow/forbidden the random move of the player.
-		
-		int forbidden1 = 0 ; 
-		int forbidden2 = 0 ; 
-		int forbidden3 = 0 ; 
-		int forbidden4 = 0 ;
-		int forbidden5 = 0 ;
-		int forbidden6 = 0 ;
-		int forbidden7 = 0 ;
-		int forbidden8 = 0 ;
-		
-		// If the player can't go north , northeast or east, the corresponding variables are set.
-		
-		if ( getX ( ) + 1 > getBoard ( ).getM ( ) / 2 & getY ( ) - 1 < - getBoard ( ).getN ( ) / 2 ) {
-			
-			forbidden1 = 1 ;
-			forbidden2 = 2 ;
-			forbidden3 = 3 ;
-			forbidden4 = 4 ;
-			forbidden8 = 8 ;
-			
-		}
-		
-		// Same for the remaining directions.
-		
-        if ( getX ( ) + 1 > getBoard ( ).getM ( ) / 2 & getY ( ) + 1 > getBoard ( ).getN ( ) / 2 ) {
-			
-        	forbidden2 = 2 ;
-			forbidden3 = 3 ;
-			forbidden4 = 4 ;
-			forbidden5 = 5 ;
-			forbidden6 = 6 ;
-			
-		}
+	    potentialMoves = playerPerimeter ( getX ( ) , getY ( ) ) ;
+	    
+	    while ( Math.abs ( potentialMoves [ rand ] [ 0 ] ) > Math.abs ( getBoard ( ).getM ( ) / 2 ) | Math.abs ( potentialMoves [ rand ] [ 1 ] ) > Math.abs ( getBoard ( ).getN ( ) / 2 ) ) {
         
-        if ( getX ( ) - 1 < - getBoard ( ).getM ( ) / 2 & getY ( ) + 1 > getBoard ( ).getN ( ) / 2 ) {
-			
-        	forbidden4 = 4 ;
-			forbidden5 = 5 ;
-			forbidden6 = 6 ;
-			forbidden7 = 7 ;
-			forbidden8 = 8 ;
-			
-		}
-        
-        if ( getX ( ) - 1 < - getBoard ( ).getM ( ) / 2 & getY ( ) - 1 < - getBoard ( ).getN ( ) / 2 ) {
-			
-        	forbidden1 = 1 ;
-			forbidden2 = 2 ;
-			forbidden6 = 6 ;
-			forbidden7 = 7 ;
-			forbidden8 = 8 ;
-			
-		}
-        
-        if ( getY ( ) - 1 < - getBoard ( ).getN ( ) / 2 ) {
-			
-        	forbidden1 = 1 ;
-			forbidden2 = 2 ;
-			forbidden8 = 8 ;
-			
-		}
-        
-        if ( getY ( ) + 1 > getBoard ( ).getN ( ) / 2 ) {
-			
-        	forbidden4 = 4 ;
-			forbidden5 = 5 ;
-			forbidden6 = 6 ;
-			
-		}
-        
-        if ( getX ( ) + 1 > getBoard ( ).getM ( ) / 2 ) {
-			
-        	forbidden2 = 2 ;
-			forbidden3 = 3 ;
-			forbidden4 = 4 ;
-			
-		}
-        
-        if ( getX ( ) - 1 < - getBoard ( ).getM ( ) / 2 ) {
-			
-        	forbidden6 = 6 ;
-			forbidden7 = 7 ;
-			forbidden8 = 8 ;
-			
-		}
-        
-        // Now if rand is nothing like the variables that got "activated" , it will let the player move.
-		
-		int rand = ( ( int ) ( Math.random ( ) * 7 ) ) + 1 ;
-		
-		while ( rand == forbidden1 | rand == forbidden2 | rand == forbidden3 | rand == forbidden4 | rand == forbidden5 | rand == forbidden6 | rand == forbidden7 | rand == forbidden8 ) {
-			
-			rand = ( ( int ) ( Math.random ( ) * 7 ) ) + 1 ;
-			
-		}
-		
-		// Now that rand passed the test,it's time to assign and return the new directions.(The ifs inside the switch statement are used to skip the zero cords situation. 
-		
-		switch ( rand ) {
-		
-		case 1 :
-			
-			if ( getY ( ) - 1 == 0 ) {
-			
-			newSquare [ 0 ] = getX ( ) ;
-			
-			newSquare [ 1 ] = getY ( ) - 2 ;
-			
-			}
-			
-			else {
-				
-				newSquare [ 0 ] = getX ( ) ;
-				
-				newSquare [ 1 ] = getY ( ) - 1 ;
-				
-			}
-			
-			break ;
-			
-        case 2 :
-        	
-        	if ( getY ( ) - 1 == 0 & getX ( ) + 1 == 0 ) {
-        	
-			newSquare [ 0 ] = getX ( ) + 2 ;
-			
-			newSquare [ 1 ] = getY ( ) - 2 ;
-			
-        	}
-        	
-        	else if ( getY ( ) - 1 != 0 & getX ( ) + 1 == 0 ) {
-            	
-			newSquare [ 0 ] = getX ( ) + 2 ;
-			
-			newSquare [ 1 ] = getY ( ) - 1 ;
-			
-        	}
-        	
-        	else if ( getY ( ) - 1 == 0 & getX ( ) + 1 != 0 ) {
-            	
-			newSquare [ 0 ] = getX ( ) + 1 ;
-			
-			newSquare [ 1 ] = getY ( ) - 2 ;
-			
-        	}
-        	
-        	else {
-            	
-    		newSquare [ 0 ] = getX ( ) + 1 ;
-    			
-    		newSquare [ 1 ] = getY ( ) - 1 ;
-    			
-            }
-			
-			break ;
-			
-        case 3 :
-        	
-        	if ( getX ( ) + 1 == 0 ) {
-        	
-			newSquare [ 0 ] = getX ( ) + 2 ;
-			
-			newSquare [ 1 ] = getY ( ) ; 
-
-        	} else {
-        		
-    			newSquare [ 0 ] = getX ( ) + 1 ;
-    			
-    			newSquare [ 1 ] = getY ( ) ;
-        	}
-        	
-	        break ;
-	
-        case 4 :
-        	
-        	if ( getY ( ) + 1 == 0 & getX ( ) + 1 == 0 ) {
-            	
-    			newSquare [ 0 ] = getX ( ) + 2 ;
-    			
-    			newSquare [ 1 ] = getY ( ) + 2 ;
-    			
-            	}
-            	
-            	else if ( getY ( ) + 1 != 0 & getX ( ) + 1 == 0 ) {
-                	
-    			newSquare [ 0 ] = getX ( ) + 2 ;
-    			
-    			newSquare [ 1 ] = getY ( ) + 1 ;
-    			
-            	}
-            	
-            	else if ( getY ( ) + 1 == 0 & getX ( ) + 1 != 0 ) {
-                	
-    			newSquare [ 0 ] = getX ( ) + 1 ;
-    			
-    			newSquare [ 1 ] = getY ( ) + 2 ;
-    			
-            	}
-            	
-            	else {
-                	
-        		newSquare [ 0 ] = getX ( ) + 1 ;
-        			
-        		newSquare [ 1 ] = getY ( ) + 1 ;
-        			
-                }
-    			
-	
-	        break ;
-	
-        case 5 :
-        	
-        	if ( getY ( ) + 1 == 0 ) {
-        	
-            newSquare [ 0 ] = getX ( ) ;
-			
-			newSquare [ 1 ] = getY ( ) + 2 ;
-			
-        	} else {
-        		
-                newSquare [ 0 ] = getX ( ) ;
-    			
-    			newSquare [ 1 ] = getY ( ) + 1 ;
-    			
-        	}
-
-	         break ;
-	
-        case 6 :
-        	
-                if ( getY ( ) + 1 == 0 & getX ( ) - 1 == 0 ) {
-            	
-    			newSquare [ 0 ] = getX ( ) - 2 ;
-    			
-    			newSquare [ 1 ] = getY ( ) + 2 ;
-    			
-            	}
-            	
-            	else if ( getY ( ) + 1 != 0 & getX ( ) - 1 == 0 ) {
-                	
-    			newSquare [ 0 ] = getX ( ) - 2 ;
-    			
-    			newSquare [ 1 ] = getY ( ) + 1 ;
-    			
-            	}
-            	
-            	else if ( getY ( ) + 1 == 0 & getX ( ) - 1 != 0 ) {
-                	
-    			newSquare [ 0 ] = getX ( ) - 1 ;
-    			
-    			newSquare [ 1 ] = getY ( ) + 2 ;
-    			
-            	}
-            	
-            	else {
-                	
-        		newSquare [ 0 ] = getX ( ) - 1 ;
-        			
-        		newSquare [ 1 ] = getY ( ) + 1 ;
-        			
-                }
-    			
-
-	         break ;
-	
-        case 7 :
-        	
-        	if ( getX ( ) - 1 == 0 ) {
-        	
-            newSquare [ 0 ] = getX ( ) - 2 ;
-			
- 			newSquare [ 1 ] = getY ( ) ;
-        	} else {
-        		
-                newSquare [ 0 ] = getX ( ) - 1 ;
-    			
-     			newSquare [ 1 ] = getY ( ) ;
-        		
-        	}
-	         break ;
-	
-        case 8 :
-        	
-            if ( getY ( ) - 1 == 0 & getX ( ) - 1 == 0 ) {
-            	
-			newSquare [ 0 ] = getX ( ) - 2 ;
-			
-			newSquare [ 1 ] = getY ( ) - 2 ;
-			
-        	}
-        	
-        	else if ( getY ( ) - 1 != 0 & getX ( ) - 1 == 0 ) {
-            	
-			newSquare [ 0 ] = getX ( ) - 2 ;
-			
-			newSquare [ 1 ] = getY ( ) - 1 ;
-			
-        	}
-        	
-        	else if ( getY ( ) - 1 == 0 & getX ( ) - 1 != 0 ) {
-            	
-			newSquare [ 0 ] = getX ( ) - 1 ;
-			
-			newSquare [ 1 ] = getY ( ) - 2 ;
-			
-        	}
-        	
-        	else {
-            	
-    		newSquare [ 0 ] = getX ( ) - 1 ;
-    			
-    		newSquare [ 1 ] = getY ( ) - 1 ;
-    			
-            }
-
-	        break ;
-		
+	        rand = ( int ) ( Math.random ( ) * 7 ) ;
+	    
 	    }
-		
-		return newSquare ;
-		
+	    
+	    return potentialMoves [ rand ] ;
+	    
 	}
-	
-	// Function move.
+	    	
+   	// Function move.
 	
 	int [ ] move ( ) {
 		
-		//First the move direction is printed
-		
 		int oldx = getX ( ) ;
-		
 		int oldy = getY ( ) ;
-		
 		int [ ] Move = getRandomMove ( ) ;
-		
-		// Then the new cords are set as player coordinates.
-		
 		setX ( Move [ 0 ] ) ;
-		
 		setY ( Move [ 1 ] ) ;
-		
 		int weapons = 0 ;
-		
 		int traps = 0 ;
-		
 		int food = 0 ;
-		
 		int [ ] intmove = new int [ 5 ] ;
 		
 		if ( oldx == getX ( ) & oldy > getY ( ) ) {
 		
-		System.out.println ( getName ( ) + " moved North " + "\n" + "\n" ) ;
+		    System.out.println ( getName ( ) + " moves North." + "\n" + "\n" ) ;
 		
 		}
 		
 		if ( oldx < getX ( ) & oldy > getY ( ) ) {
 			
-		System.out.println ( getName ( ) + " moved Northeast " + "\n" + "\n" ) ;
+		    System.out.println ( getName ( ) + " moves Northeast." + "\n" + "\n" ) ;
 		
 		}
 		
 		if ( oldx > getX ( ) & oldy > getY ( ) ) {
 			
-		System.out.println ( getName ( ) + " moved Northwest " + "\n" + "\n" ) ;
+		    System.out.println ( getName ( ) + " moves Northwest." + "\n" + "\n" ) ;
 		
 		}
 		
 		if ( oldx < getX ( ) & oldy == getY ( ) ) {
 			
-		System.out.println ( getName ( ) + " moved East " + "\n" + "\n" ) ;
+		    System.out.println ( getName ( ) + " moves East." + "\n" + "\n" ) ;
 		
 		}
 		
 		if ( oldx < getX ( ) & oldy < getY ( ) ) {
 			
-		System.out.println ( getName ( ) + " moved Southeast " + "\n" + "\n" ) ;
+		    System.out.println ( getName ( ) + " moves Southeast." + "\n" + "\n" ) ;
 		
 		}
 		
 		if ( oldx == getX ( ) & oldy < getY ( ) ) {
 			
-		System.out.println ( getName ( ) + " moved South " + "\n" + "\n" ) ;
+		    System.out.println ( getName ( ) + " moves South." + "\n" + "\n" ) ;
 		
 		}
 		
 		if ( oldx > getX ( ) & oldy < getY ( ) ) {
 			
-		System.out.println ( getName ( ) + " moved Southwest " + "\n" + "\n" ) ;
+		    System.out.println ( getName ( ) + " moves Southwest." + "\n" + "\n" ) ;
 		
 		}
 		
 		if ( oldx > getX ( ) & oldy == getY ( ) ) {
 			
-		System.out.println ( getName ( ) + " moved West " + "\n" + "\n" ) ;
+		    System.out.println ( getName ( ) + " moves West." + "\n" + "\n" ) ;
 		
 		}
 		
-		// Here the activity the player is printed.
+		// Here the activity of the player is printed.
 		
 		for ( int i = 0 ; i < getBoard ( ).getWeapons ( ).length ; i++ ) {
 			
-			if ( getX ( ) == getBoard ( ).getWeapons ( ) [ i ].getX ( ) & getY ( ) == getBoard ( ).getWeapons ( ) [ i ].getY ( ) & getId ( ) == getBoard ( ).getWeapons ( ) [ i ].getPlayerId ( ) ) {
+		   	if ( getX ( ) == getBoard ( ).getWeapons ( ) [ i ].getX ( ) & getY ( ) == getBoard ( ).getWeapons ( ) [ i ].getY ( ) & getId ( ) == getBoard ( ).getWeapons ( ) [ i ].getPlayerId ( ) ) {
 				
-				switch ( getBoard ( ).getWeapons ( ) [ i ].getType ( ) ) {
+			   	switch ( getBoard ( ).getWeapons ( ) [ i ].getType ( ) ) {
 				
 				case "bow" :
 					
-					setBow ( getBoard ( ).getWeapons ( ) [ i ] ) ;
-					
-					System.out.println ( getName ( ) + " acquired the " + "W" + getBoard ( ).getWeapons ( ) [ i ].getPlayerId ( ) + getBoard ( ).getWeapons ( ) [ i ].getId ( ) + " bow." + "\n" + "\n" ) ;
-					
-					// The cords are set to 0 to remove the weapon from the game upon acquisition.
-					
+				   	setBow ( getBoard ( ).getWeapons ( ) [ i ] ) ;
+					System.out.println ( getName ( ) + " acquires the " + "W" + getBoard ( ).getWeapons ( ) [ i ].getPlayerId ( ) + getBoard ( ).getWeapons ( ) [ i ].getId ( ) + " bow." + "\n" + "\n" ) ;
 					getBoard ( ).getWeapons ( ) [ i ].setX ( 0 ) ;
-					
 					getBoard ( ).getWeapons ( ) [ i ].setY ( 0 ) ;
-					
 					weapons++ ;
 					
-					break ;
+				break ;
 					
                 case "pistol" :
                 	
                 	setPistol ( getBoard ( ).getWeapons ( ) [ i ] ) ;
-					
-					System.out.println ( getName ( ) + " acquired the " + "W" + getBoard ( ).getWeapons ( ) [ i ].getPlayerId ( ) + getBoard ( ).getWeapons ( ) [ i ].getId ( ) + " pistol." + "\n" + "\n" ) ;
-					
+					System.out.println ( getName ( ) + " acquires the " + "W" + getBoard ( ).getWeapons ( ) [ i ].getPlayerId ( ) + getBoard ( ).getWeapons ( ) [ i ].getId ( ) + " pistol." + "\n" + "\n" ) ;
 					getBoard ( ).getWeapons ( ) [ i ].setX ( 0 ) ;
-					
-					getBoard ( ).getWeapons ( ) [ i ].setY ( 0 ) ;
-					
+					getBoard ( ).getWeapons ( ) [ i ].setY ( 0 ) ;					
 					weapons++ ;
 					
-					break ;
+				break ;
 					
                 case "sword" :
                 	
-                	setSword ( getBoard ( ).getWeapons ( ) [ i ] ) ;
-					
-					System.out.println ( getName ( ) + " acquired the " + "W" + getBoard ( ).getWeapons ( ) [ i ].getPlayerId ( ) + getBoard ( ).getWeapons ( ) [ i ].getId ( ) + " sword." + "\n" + "\n" ) ;
-					
+                	setSword ( getBoard ( ).getWeapons ( ) [ i ] ) ;	
+					System.out.println ( getName ( ) + " acquires the " + "W" + getBoard ( ).getWeapons ( ) [ i ].getPlayerId ( ) + getBoard ( ).getWeapons ( ) [ i ].getId ( ) + " sword." + "\n" + "\n" ) ;
 					getBoard ( ).getWeapons ( ) [ i ].setX ( 0 ) ;
-					
 					getBoard ( ).getWeapons ( ) [ i ].setY ( 0 ) ;
-					
 					weapons++ ;
 					
-					break ;
+				break ;
 					
 				}		
 				
-		    }
-			
+		    }   
+
 			if ( getX ( ) == getBoard ( ).getWeapons ( ) [ i ].getX ( ) & getY ( ) == getBoard ( ).getWeapons ( ) [ i ].getY ( ) & getId ( ) != getBoard ( ).getWeapons ( ) [ i ].getPlayerId ( ) ) {
 				
-				switch ( getBoard ( ).getWeapons ( ) [ i ].getType ( ) ) {
+			   	switch ( getBoard ( ).getWeapons ( ) [ i ].getType ( ) ) {
 				
 				case "bow" :
 					
-					System.out.println ( getName ( ) + " touched the " + "W" + getBoard ( ).getWeapons ( ) [ i ].getPlayerId ( ) + getBoard ( ).getWeapons ( ) [ i ].getId ( ) + " bow,but it's not his to claim. " + "\n" + "\n" ) ;
+					System.out.println ( getName ( ) + " touches the " + "W" + getBoard ( ).getWeapons ( ) [ i ].getPlayerId ( ) + getBoard ( ).getWeapons ( ) [ i ].getId ( ) + " bow, but it's not theirs to claim. " + "\n" + "\n" ) ;
 					
-					break ;
+				break ;
 					
                 case "pistol" :
                 	
-					System.out.println ( getName ( ) + " touched the " + "W" + getBoard ( ).getWeapons ( ) [ i ].getPlayerId ( ) + getBoard ( ).getWeapons ( ) [ i ].getId ( ) + " pistol,but it's not his to claim. " + "\n" + "\n" ) ;
+					System.out.println ( getName ( ) + " touches the " + "W" + getBoard ( ).getWeapons ( ) [ i ].getPlayerId ( ) + getBoard ( ).getWeapons ( ) [ i ].getId ( ) + " pistol, but it's not theirs to claim. " + "\n" + "\n" ) ;
 					
-					break ;
+				break ;
 					
                 case "sword" :
                 	
-					System.out.println ( getName ( ) + " touched the " + "W" + getBoard ( ).getWeapons ( ) [ i ].getPlayerId ( ) + getBoard ( ).getWeapons ( ) [ i ].getId ( ) + " sword,but it's not his to claim. " + "\n" + "\n" ) ;
+					System.out.println ( getName ( ) + " touches the " + "W" + getBoard ( ).getWeapons ( ) [ i ].getPlayerId ( ) + getBoard ( ).getWeapons ( ) [ i ].getId ( ) + " sword, but it's not theirs to claim. " + "\n" + "\n" ) ;
 					
-					break ;
+				break ;
 					
 				}		
 				
-		    }
+		    }   
 			
-		}
+		}   
 		
 		for ( int i = 0 ; i < getBoard ( ).getTraps ( ).length ; i++ ) {
 			
 			if ( getX ( ) == getBoard ( ).getTraps ( ) [ i ].getX ( ) & getY ( ) == getBoard ( ).getTraps ( ) [ i ].getY ( ) ) {
 				
-				switch ( getBoard ( ).getTraps ( ) [ i ].getType ( ) ) {
+			   	switch ( getBoard ( ).getTraps ( ) [ i ].getType ( ) ) {
 				
 				case "animal" :
 					
-					if ( getBow ( ) != null ) {
+				   	if ( getBow ( ) != null ) {
 					
-					   setScore ( getScore ( ) ) ;
-					
-					   System.out.println ( getName ( ) + " defeated the " + "T" + getBoard ( ).getTraps ( ) [ i ].getId ( ) + " beast." + "\n" + "\n" ) ;
-					
-					   traps++ ;
+					    setScore ( getScore ( ) ) ;
+					    System.out.println ( getName ( ) + " defeats the " + "T" + getBoard ( ).getTraps ( ) [ i ].getId ( ) + " beast." + "\n" + "\n" ) ;
+					    traps++ ;
 					   
-					}
+					}  
 					
 					else {
 					
-					setScore ( getScore ( ) + getBoard ( ).getTraps ( ) [ i ].getPoints ( ) ) ;
+					    setScore ( getScore ( ) + getBoard ( ).getTraps ( ) [ i ].getPoints ( ) ) ;
+					    System.out.println ( getName ( ) + " cannot defeat the " + "T" + getBoard ( ).getTraps ( ) [ i ].getId ( ) + " beast." + "\n" + "\n" ) ;
 					
-					System.out.println ( getName ( ) + " could not defeat the " + "T" + getBoard ( ).getTraps ( ) [ i ].getId ( ) + " beast." + "\n" + "\n" ) ;
+					    if ( ( - getBoard ( ).getTraps ( ) [ i ].getPoints ( ) ) == 1 ) {
+						
+					   	    System.out.println ( getName ( ) + " loses " + ( - getBoard ( ).getTraps ( ) [ i ].getPoints ( ) ) + " point." + "\n" + "\n" ) ;
+						    traps++ ;
+						
+					    }   
 					
-					System.out.println ( getName ( ) + " lost " + ( - getBoard ( ).getTraps ( ) [ i ].getPoints ( ) ) + " points." + "\n" + "\n" ) ;
-					
-					traps++ ;
+					    else {
+						
+					   	    System.out.println ( getName ( ) + " loses " + ( - getBoard ( ).getTraps ( ) [ i ].getPoints ( ) ) + " points." + "\n" + "\n" ) ;
+						    traps++ ;
+						
+					    }
 					
 					}
 					
-					break ;
+				break ;
 					
                 case "rope" :
                 	
-                	if ( getSword ( ) != null ) {
+                   	if ( getSword ( ) != null ) {
                 		
-                	   setScore ( getScore ( ) ) ;
-    					
- 					   System.out.println ( getName ( ) + " outplayed the " + "T" + getBoard ( ).getTraps ( ) [ i ].getId ( ) + " trap." + "\n" + "\n" ) ;
- 					
- 					   traps++ ;
+                	    setScore ( getScore ( ) ) ;
+ 					    System.out.println ( getName ( ) + " outplays the " + "T" + getBoard ( ).getTraps ( ) [ i ].getId ( ) + " trap." + "\n" + "\n" ) ;
+ 					    traps++ ;
  					   
-                	}
+                	}   
                 	
                 	else {
                 	
-                	setScore ( getScore ( ) + getBoard ( ).getTraps ( ) [ i ].getPoints ( ) ) ;
+                	    setScore ( getScore ( ) + getBoard ( ).getTraps ( ) [ i ].getPoints ( ) ) ;
+					    System.out.println ( getName ( ) + " gets outplayed by the " + "T" + getBoard ( ).getTraps ( ) [ i ].getId ( ) + " trap." + "\n" + "\n" ) ;
 					
-					System.out.println ( getName ( ) + " got outplayed by the " + "T" + getBoard ( ).getTraps ( ) [ i ].getId ( ) + " trap." + "\n" + "\n" ) ;
+					    if ( ( - getBoard ( ).getTraps ( ) [ i ].getPoints ( ) ) == 1 ) {
 					
-					System.out.println ( getName ( ) + " lost " + ( - getBoard ( ).getTraps ( ) [ i ].getPoints ( ) ) + " points." + "\n" + "\n" ) ;
+					        System.out.println ( getName ( ) + " loses " + ( - getBoard ( ).getTraps ( ) [ i ].getPoints ( ) ) + " point." + "\n" + "\n" ) ;
+					        traps++ ;
 					
-					traps++ ;
+					    }	
 					
-					}	
+					    else {
+						
+					   	    System.out.println ( getName ( ) + " loses " + ( - getBoard ( ).getTraps ( ) [ i ].getPoints ( ) ) + " points." + "\n" + "\n" ) ;
+						    traps++ ;
+						
+					    }   
+					
+                	}
                 	
-                	break ;
+                break ;
 				
-				}
+		        }
+			
 		    }
 			
-		}
+		}   
 		
 		for ( int i = 0 ; i < getBoard ( ).getFood ( ).length ; i++ ) {
 			
-			if ( getX ( ) == getBoard ( ).getFood ( ) [ i ].getX ( ) & getY ( ) == getBoard ( ).getFood ( ) [ i ].getY ( ) ) {
+		   	if ( getX ( ) == getBoard ( ).getFood ( ) [ i ].getX ( ) & getY ( ) == getBoard ( ).getFood ( ) [ i ].getY ( ) ) {
 				
-					setScore ( getScore ( ) + getBoard ( ).getFood ( ) [ i ].getPoints ( ) ) ;
+			   	setScore ( getScore ( ) + getBoard ( ).getFood ( ) [ i ].getPoints ( ) ) ;	
+				System.out.println ( getName ( ) + " acquires the " + "F" + getBoard ( ).getFood ( ) [ i ].getId ( ) + " supply." + "\n" + "\n" ) ;
 					
-					System.out.println ( getName ( ) + " acquired the " + "F" + getBoard ( ).getFood ( ) [ i ].getId ( ) + " supply." + "\n" + "\n" ) ;
+				if ( getBoard ( ).getFood ( ) [ i ].getPoints ( ) == 1 ) {
 					
-					System.out.println ( getName ( ) + " earned " + getBoard ( ).getFood ( ) [ i ].getPoints ( ) + " points." + "\n" + "\n" ) ;
-					
+				    System.out.println ( getName ( ) + " earns " + getBoard ( ).getFood ( ) [ i ].getPoints ( ) + " point." + "\n" + "\n" ) ;
                     getBoard ( ).getFood ( ) [ i ].setX ( 0 ) ;
-					
 					getBoard ( ).getFood ( ) [ i ].setY ( 0 ) ;
-					
 					food++ ;
 					
-					}
+				}   
 					
-				}
+				else {
+						
+				    System.out.println ( getName ( ) + " earns " + getBoard ( ).getFood ( ) [ i ].getPoints ( ) + " points." + "\n" + "\n" ) ;	
+	                getBoard ( ).getFood ( ) [ i ].setX ( 0 ) ;	
+					getBoard ( ).getFood ( ) [ i ].setY ( 0 ) ;	
+					food++ ;
+						
+				}   
+					
+			}   
+			
+		}   
 	    
 		intmove [ 0 ] = getX ( ) ;
-		
 		intmove [ 1 ] = getY ( ) ;
-		
 		intmove [ 2 ] = weapons ;
-		
 		intmove [ 3 ] = traps ;
-		
 		intmove [ 4 ] = food ;
 		
 		return intmove ;
 		
-	}
+	}   
 	
 }
