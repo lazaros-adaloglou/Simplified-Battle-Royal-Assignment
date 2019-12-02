@@ -1,10 +1,10 @@
-//Lazaros Adaloglou
+// Lazaros Adaloglou.
 
 // Weapon Class.
 
 public class Weapon {
 
-	// Class Variables.
+    // Class Variables.
 	
 	int id ;
 	int x ;
@@ -16,7 +16,7 @@ public class Weapon {
 	
 	public int getId ( ) { 
 		
-		return id ;
+	    return id ;
 		
 	}
 
@@ -77,6 +77,12 @@ public class Weapon {
 	// Constructors.
 	
     public Weapon ( ) {
+    	
+		setId ( 0 ) ;
+		setX ( 0 ) ;
+		setY ( 0 ) ; ;
+		setPlayerId ( 0 ) ; ;
+		setType ( "null" ) ;
 		
 	}
 	
