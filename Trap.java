@@ -1,10 +1,10 @@
-//Lazaros Adaloglou
+// Lazaros Adaloglou.
 
 // Trap Class.
 
 public class Trap {
 	
-	// Class Variables.
+    // Class Variables.
 	
 	int id ;
 	int x ;
@@ -77,6 +77,12 @@ public class Trap {
 	// Constructors.
 	
 	public Trap ( ) {
+		
+		setId ( 0 ) ;
+		setX ( 0 ) ;
+		setY ( 0 ) ;
+		setPoints ( 0 ) ;
+		setType ( "null" ) ;
 			
 	}
 		
